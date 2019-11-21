@@ -1,6 +1,6 @@
-import { APIGatewayEvent, Callback, Context, Handler } from "aws-lambda";
+import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
 
-interface IHelloResponse {
+interface HelloResponse {
   statusCode: number;
   body: string;
 }
@@ -11,7 +11,7 @@ const handler: Handler = (
   callback: Callback
 ) => {
   const params = event.queryStringParameters;
-  const response: IHelloResponse = {
+  const response: HelloResponse = {
     body: JSON.stringify({
       msg: `Hello world ${Math.floor(Math.random() * 10)}`,
       params
