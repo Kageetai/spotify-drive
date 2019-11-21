@@ -6,5 +6,5 @@
     "module": "esnext",
     "moduleResolution": "node"
   },
-  "files": ["api/hello.ts", "api/hello-aws.ts"]
+  "files": ["api/hello.ts", "api/hello-aws.ts", "api/login.ts"]
 }
