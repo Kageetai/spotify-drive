@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "build/api"
+    "outDir": "build/api",
+    "strict": true,
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node"
   },
   "files": ["api/hello.ts", "api/hello-aws.ts"]
 }
