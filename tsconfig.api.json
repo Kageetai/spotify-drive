@@ -3,7 +3,7 @@
     "outDir": "build/api",
     "strict": true,
     "target": "es5",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node"
   },
   "files": ["api/hello.ts", "api/hello-aws.ts", "api/login.ts"]
