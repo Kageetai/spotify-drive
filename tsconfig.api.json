@@ -2,5 +2,5 @@
   "compilerOptions": {
     "outDir": "build/api"
   },
-  "files": ["api/hello.ts"]
+  "files": ["api/hello.ts", "api/hello-aws.ts"]
 }
