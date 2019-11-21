@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
-import queryString from 'querystring';
+import { stringify } from 'querystring';
 
 import { generateRandomString } from './utils/random';
 
@@ -24,7 +24,7 @@ const handler: Handler = (
     headers: {
       Location:
         spotifyAuthBase +
-        queryString.stringify({
+        stringify({
           response_type: 'code',
           client_id: process.env.SPOTIFY_CLIENT_ID,
           scope: scope,
