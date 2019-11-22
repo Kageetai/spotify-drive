@@ -3,7 +3,6 @@ import React from 'react';
 import { stringify } from 'querystring';
 
 import './App.css';
-import logo from './logo.svg';
 import { generateRandomString } from './utils/random';
 
 const scope = 'user-read-private user-read-email';
@@ -22,10 +21,8 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <h1>Spotify Library Manager</h1>
+
         <a className="App-link" href={spotifyAuthorize}>
           Login
         </a>
