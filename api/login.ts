@@ -2,7 +2,7 @@
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
 import { stringify } from 'querystring';
 
-import { generateRandomString } from './utils/random';
+import { generateRandomString } from '../src/utils/random';
 
 interface HelloResponse {
   statusCode: number;
