@@ -10,15 +10,19 @@ const scope = 'user-read-private user-read-email';
 const state = generateRandomString(16);
 const spotifyAuthorize = `${
   process.env.REACT_APP_SPOTIFY_AUTH_URL_BASE
-}?${stringify({
+}authorize?${stringify({
   response_type: 'code',
   client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
   scope: scope,
   redirect_uri: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
   state: state,
 })}`;
+const urlParams = new URLSearchParams(window.location.search);
+const accessCode = urlParams.get('code') || '';
 
 const App: React.FC = () => {
+  console.log(accessCode);
+
   const onLogin = () => {
     localStorage.setItem(stateKey, state);
     window.location.assign(spotifyAuthorize);
