@@ -3,6 +3,7 @@ import React from 'react';
 import { stringify } from 'querystring';
 
 import './App.css';
+import { getToken } from './utils/auth';
 import { generateRandomString } from './utils/random';
 
 const stateKey = 'spotify_auth_state';
@@ -19,10 +20,11 @@ const spotifyAuthorize = `${
 })}`;
 const urlParams = new URLSearchParams(window.location.search);
 const authCode = urlParams.get('code') || '';
+if (authCode) {
+  getToken(authCode).then(token => console.log(token));
+}
 
 const App: React.FC = () => {
-  console.log(authCode);
-
   const onLogin = () => {
     localStorage.setItem(stateKey, state);
     window.location.assign(spotifyAuthorize);

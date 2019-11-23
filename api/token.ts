@@ -6,6 +6,7 @@ import { URLSearchParams } from 'url';
 interface MaResponse {
   statusCode: number;
   body: string;
+  headers: {};
 }
 
 const handler: Handler = (
@@ -44,9 +45,8 @@ const handler: Handler = (
         .then((res: Response) => res.json())
         .then((token: {}) => {
           const response: MaResponse = {
-            body: JSON.stringify({
-              token,
-            }),
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            body: JSON.stringify(token),
             statusCode: 200,
           };
           return callback(null, response);
