@@ -18,10 +18,10 @@ const spotifyAuthorize = `${
   state: state,
 })}`;
 const urlParams = new URLSearchParams(window.location.search);
-const accessCode = urlParams.get('code') || '';
+const authCode = urlParams.get('code') || '';
 
 const App: React.FC = () => {
-  console.log(accessCode);
+  console.log(authCode);
 
   const onLogin = () => {
     localStorage.setItem(stateKey, state);
