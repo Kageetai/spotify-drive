@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
-import fetch from 'node-fetch';
+import 'isomorphic-fetch';
 import { URLSearchParams } from 'url';
 
-interface Response {
+interface MaResponse {
   statusCode: number;
   body: string;
 }
@@ -41,9 +41,9 @@ const handler: Handler = (
         },
         body: params,
       })
-        .then((res) => res.json())
-        .then((token) => {
-          const response: Response = {
+        .then((res: Response) => res.json())
+        .then((token: {}) => {
+          const response: MaResponse = {
             body: JSON.stringify({
               token,
             }),
