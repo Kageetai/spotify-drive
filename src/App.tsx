@@ -21,7 +21,12 @@ const spotifyAuthorize = `${
 const urlParams = new URLSearchParams(window.location.search);
 const authCode = urlParams.get('code') || '';
 if (authCode) {
-  getToken(authCode).then(token => console.log(token));
+  if (localStorage.getItem(stateKey) === urlParams.get('state')) {
+    window.history.replaceState({}, document.title, '/');
+    getToken(authCode).then((token) => console.log(token));
+  } else {
+    console.error('state mismatch');
+  }
 }
 
 const App: React.FC = () => {
