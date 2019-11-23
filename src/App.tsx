@@ -3,8 +3,9 @@ import React from 'react';
 import { stringify } from 'querystring';
 
 import './App.css';
-import { getToken } from './utils/auth';
+import Me from './Me';
 import { generateRandomString } from './utils/random';
+import { initApi, isLoggedIn } from './utils/spotify';
 
 const stateKey = 'spotify_auth_state';
 const scope = 'user-read-private user-read-email';
@@ -21,12 +22,14 @@ const spotifyAuthorize = `${
 const urlParams = new URLSearchParams(window.location.search);
 const authCode = urlParams.get('code') || '';
 if (authCode) {
+  initApi(authCode);
   if (localStorage.getItem(stateKey) === urlParams.get('state')) {
     window.history.replaceState({}, document.title, '/');
-    getToken(authCode).then((token) => console.log(token));
   } else {
     console.error('state mismatch');
   }
+} else {
+  initApi();
 }
 
 const App: React.FC = () => {
@@ -40,9 +43,13 @@ const App: React.FC = () => {
       <header className="App-header">
         <h1>Spotify Library Manager</h1>
 
-        <a className="App-link" href={spotifyAuthorize} onClick={onLogin}>
-          Login
-        </a>
+        {isLoggedIn() ? (
+          <Me />
+        ) : (
+          <a className="App-link" href={spotifyAuthorize} onClick={onLogin}>
+            Login
+          </a>
+        )}
       </header>
     </div>
   );
