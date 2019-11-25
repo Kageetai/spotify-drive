@@ -4,7 +4,6 @@ import spotifyApi from './utils/spotify';
 
 const Me: React.FC = () => {
   const [me, setMe] = React.useState<SpotifyApi.CurrentUsersProfileResponse>();
-  console.log(me);
 
   React.useEffect(() => {
     spotifyApi.getMe().then((res) => setMe(res.body));
