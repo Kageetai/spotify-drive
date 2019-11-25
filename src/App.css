@@ -17,6 +17,14 @@
   color: black;
 }
 
-.App-link {
+a {
+  display: inline-block;
   color: #158837;
+  text-decoration: none;
+  transition: all 0.5s;
+}
+
+a:hover {
+  text-shadow: 0 0.1em 0.1em lightgray;
+  transform: translateY(-0.05em);
 }
