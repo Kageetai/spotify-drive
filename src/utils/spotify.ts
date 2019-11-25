@@ -53,7 +53,7 @@ export const initApi = (authCode?: string) => {
   }
 };
 
-// TODO check for expired token
+// TODO check for expired token and refresh it
 export const isLoggedIn = () => {
   const now = Date.now();
   return !!accessToken && parseInt(expiresIn || '0', 10) + now > now;

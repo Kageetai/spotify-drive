@@ -13,6 +13,7 @@ if (authCode) {
 }
 
 const App: React.FC = () => {
+  // TODO use context to retrieve isLoggedIn
   return (
     <div className="App">
       <header className="App-header">
