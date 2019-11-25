@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { spotifyApi } from './utils/spotify';
+import spotifyApi from './utils/spotify';
 
 const Me: React.FC = () => {
   const [me, setMe] = React.useState<SpotifyApi.CurrentUsersProfileResponse>();
