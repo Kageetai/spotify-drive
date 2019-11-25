@@ -16,6 +16,7 @@ const handler: Handler = (
 ) => {
   try {
     const authCode = event.queryStringParameters?.authCode || '';
+    const redirectUri = event.queryStringParameters?.redirectUri || '';
 
     if (authCode) {
       const authorization =
@@ -28,10 +29,7 @@ const handler: Handler = (
 
       const params = new URLSearchParams();
       params.append('code', authCode);
-      params.append(
-        'redirect_uri',
-        process.env.REACT_APP_SPOTIFY_REDIRECT_URI || '',
-      );
+      params.append('redirect_uri', redirectUri || '');
       params.append('grant_type', 'authorization_code');
 
       fetch(`${process.env.REACT_APP_SPOTIFY_AUTH_URL_BASE}api/token`, {
