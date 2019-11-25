@@ -4,7 +4,7 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import { SpotifyAuth, SpotifyAuthVanilla } from '../types/spotify';
 import { generateRandomString } from './random';
 
-const stateKey = 'spotify_auth_state';
+const stateKey = 'authState';
 const state = generateRandomString(16);
 const scopes = ['user-read-private', 'user-read-email'];
 const accessToken = localStorage.getItem('accessToken');
@@ -31,7 +31,13 @@ const mapAuth = (auth: SpotifyAuthVanilla): SpotifyAuth => ({
 });
 
 const fetchToken = (authCode: string) =>
-  fetch(process.env.REACT_APP_LAMBDA_BASE + 'token?authCode=' + authCode)
+  fetch(
+    process.env.REACT_APP_LAMBDA_BASE +
+      'token?authCode=' +
+      authCode +
+      '&redirectUri=' +
+      process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
+  )
     .then((res) => res.json())
     .then((auth) => mapAuth(auth));
 
