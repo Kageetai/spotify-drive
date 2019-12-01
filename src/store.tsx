@@ -11,10 +11,7 @@ interface Context {
   dispatch: Dispatch<Action>;
 }
 
-const store = createContext<Context>({
-  state: initialState,
-  dispatch: () => null,
-});
+const store = createContext<Context>({} as Context);
 const { Provider } = store;
 
 const StateProvider = ({ children }: { children: React.ReactChild }) => {
