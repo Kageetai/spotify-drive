@@ -20,7 +20,7 @@ const App: React.FC = () => {
     if (authCode) {
       window.history.replaceState({}, document.title, '/');
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="App">
