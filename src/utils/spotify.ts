@@ -7,6 +7,7 @@ import { generateRandomString } from './random';
 const stateKey = 'authState';
 const state = generateRandomString(16);
 const scopes = ['user-read-private', 'user-read-email'];
+const redirectUri = window.location.origin;
 
 let accessToken = localStorage.getItem('accessToken');
 let refreshToken = localStorage.getItem('refreshToken');
@@ -14,7 +15,7 @@ let expiresIn = localStorage.getItem('expiresIn');
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
-  redirectUri: process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
+  redirectUri: redirectUri,
 });
 
 export default spotifyApi;
@@ -37,7 +38,7 @@ const fetchToken = (authCode: string) =>
       'token?authCode=' +
       authCode +
       '&redirectUri=' +
-      process.env.REACT_APP_SPOTIFY_REDIRECT_URI,
+      redirectUri,
   )
     .then((res) => res.json())
     .then((auth) => mapAuth(auth));
