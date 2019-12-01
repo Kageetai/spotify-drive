@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, Dispatch, useReducer } from 'react';
 
 import { actions, Action } from './actions';
 
@@ -6,8 +6,15 @@ const initialState = {
   isLoggedIn: false,
 };
 type State = typeof initialState;
+interface Context {
+  state: State;
+  dispatch: Dispatch<Action>;
+}
 
-const store = createContext(initialState);
+const store = createContext<Context>({
+  state: initialState,
+  dispatch: () => null,
+});
 const { Provider } = store;
 
 const StateProvider = ({ children }: { children: React.ReactChild }) => {
@@ -21,8 +28,6 @@ const StateProvider = ({ children }: { children: React.ReactChild }) => {
     }
   }, initialState);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
   return <Provider value={{ state, dispatch }}>{children}</Provider>;
 };
 

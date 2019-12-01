@@ -8,8 +8,6 @@ import { setIsLoggedIn as setIsLoggedInAction } from './actions';
 
 const App: React.FC = () => {
   // const [isLoggedIn, setIsLogged] = React.useState(false);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
   const { dispatch, state } = React.useContext(store);
 
   React.useEffect(() => {
