@@ -7,7 +7,6 @@ import { store } from './store';
 import { setIsLoggedIn as setIsLoggedInAction } from './actions';
 
 const App: React.FC = () => {
-  // const [isLoggedIn, setIsLogged] = React.useState(false);
   const { dispatch, state } = React.useContext(store);
 
   React.useEffect(() => {
@@ -15,14 +14,13 @@ const App: React.FC = () => {
     const authCode = urlParams.get('code') || '';
 
     initApi(authCode).then(() => {
-      // setIsLogged(getIsLoggedIn());
       dispatch(setIsLoggedInAction(getIsLoggedIn()));
     });
 
     if (authCode) {
       window.history.replaceState({}, document.title, '/');
     }
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="App">
