@@ -60,7 +60,7 @@ export const initApi = async (authCode?: string) => {
   } else if (accessToken && refreshToken) {
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
-    return false;
+    return new Promise((resolve) => resolve());
   }
 };
 
