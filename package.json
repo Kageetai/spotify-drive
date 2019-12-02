@@ -30,11 +30,12 @@
     "eslint-plugin-prettier": "3.1.1",
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "1.7.0",
+    "netlify-cli": "^2.21.0",
     "prettier": "1.19.1"
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:netlify": "tsc -p tsconfig.api.json --watch && netlify dev",
+    "start:netlify": "tsc -p tsconfig.api.json --watch & netlify dev",
     "build": "react-scripts build && tsc -p tsconfig.api.json",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

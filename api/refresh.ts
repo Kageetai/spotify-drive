@@ -16,14 +16,12 @@ const handler: Handler = (
   callback: Callback,
 ) => {
   try {
-    const authCode = event.queryStringParameters?.authCode || '';
-    const redirectUri = event.queryStringParameters?.redirectUri || '';
+    const refreshToken = event.queryStringParameters?.refreshToken || '';
 
-    if (authCode) {
+    if (refreshToken) {
       const params = new URLSearchParams();
-      params.append('code', authCode);
-      params.append('redirect_uri', redirectUri || '');
-      params.append('grant_type', 'authorization_code');
+      params.append('refresh_token', refreshToken);
+      params.append('grant_type', 'refresh_token');
 
       fetch(`${process.env.REACT_APP_SPOTIFY_AUTH_URL_BASE}api/token`, {
         method: 'POST',
@@ -43,7 +41,7 @@ const handler: Handler = (
           return callback(null, response);
         });
     } else {
-      return callback(new Error('no access code'));
+      return callback(new Error('no refresh token'));
     }
   } catch (e) {
     return callback(new Error(e));

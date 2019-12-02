@@ -4,14 +4,14 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import { SpotifyAuth, SpotifyAuthVanilla } from '../types/spotify';
 import { generateRandomString } from './random';
 
-const stateKey = 'authState';
-const state = generateRandomString(16);
 const scopes = ['user-read-private', 'user-read-email'];
 const redirectUri = window.location.origin;
 
 let accessToken = localStorage.getItem('accessToken');
 let refreshToken = localStorage.getItem('refreshToken');
-let expiresIn = localStorage.getItem('expiresIn');
+let expiresIn = parseInt(localStorage.getItem('expiresIn') || '0');
+let expiresAt = parseInt(localStorage.getItem('expiresAt') || '0');
+const state = localStorage.getItem('authState');
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
@@ -21,8 +21,9 @@ const spotifyApi = new SpotifyWebApi({
 export default spotifyApi;
 
 export const createAuthorizeURL = () => {
-  localStorage.setItem(stateKey, state);
-  return spotifyApi.createAuthorizeURL(scopes, state);
+  const newState = generateRandomString(16);
+  localStorage.setItem('authState', newState);
+  return spotifyApi.createAuthorizeURL(scopes, newState);
 };
 
 const mapAuth = (auth: SpotifyAuthVanilla): SpotifyAuth => ({
@@ -41,31 +42,51 @@ const fetchToken = (authCode: string) =>
       redirectUri,
   )
     .then((res) => res.json())
-    .then((auth) => mapAuth(auth));
+    .then(mapAuth);
 
-export const initApi = async (authCode?: string) => {
-  // TODO check for state mismatch
+const fetchNewToken = () =>
+  fetch(
+    process.env.REACT_APP_LAMBDA_BASE + 'refresh?refreshToken=' + refreshToken,
+  )
+    .then((res) => res.json())
+    .then(mapAuth);
+
+const setLocalToken = (auth: SpotifyAuth) => {
+  spotifyApi.setAccessToken(auth.accessToken);
+  spotifyApi.setRefreshToken(auth.refreshToken);
+
+  const absoluteExpiresAt = Date.now() + parseInt(auth.expiresIn);
+  localStorage.setItem('accessToken', auth.accessToken);
+  localStorage.setItem('expiresIn', auth.expiresIn);
+  localStorage.setItem('expiresAt', absoluteExpiresAt.toString());
+  localStorage.setItem('refreshToken', auth.refreshToken);
+  accessToken = auth.accessToken;
+  expiresIn = parseInt(auth.expiresIn);
+  expiresAt = absoluteExpiresAt;
+  refreshToken = auth.refreshToken;
+};
+
+export const initApi = async (authCode?: string, newState?: string) => {
   if (authCode && authCode !== '') {
+    if (newState !== state) {
+      console.error('state mismatch');
+      return new Promise((resolve, reject) => reject());
+    }
     return fetchToken(authCode)
-      .then((auth) => {
-        spotifyApi.setAccessToken(auth.accessToken);
-        spotifyApi.setRefreshToken(auth.refreshToken);
-        localStorage.setItem('accessToken', auth.accessToken);
-        localStorage.setItem('expiresIn', auth.expiresIn);
-        localStorage.setItem('refreshToken', auth.refreshToken);
-        accessToken = auth.accessToken;
-        expiresIn = auth.expiresIn;
-        refreshToken = auth.refreshToken;
-      })
+      .then(setLocalToken)
       .catch((err) => console.error(err));
-  } else if (accessToken && refreshToken) {
+  } else if (isTokenExpired() && refreshToken) {
+    console.log('token expired, fetching new one');
+    return fetchNewToken()
+      .then(setLocalToken)
+      .catch((err) => console.error(err));
+  } else if (accessToken && refreshToken && expiresIn && expiresAt) {
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
     return new Promise((resolve) => resolve());
   }
 };
 
-export const getIsLoggedIn = () => {
-  const now = Date.now();
-  return !!accessToken && parseInt(expiresIn || '0', 10) + now > now;
-};
+const isTokenExpired = () => expiresAt && expiresAt < Date.now();
+
+export const getIsLoggedIn = () => !!accessToken && !isTokenExpired();

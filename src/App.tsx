@@ -12,8 +12,9 @@ const App: React.FC = () => {
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code') || '';
+    const state = urlParams.get('state') || '';
 
-    initApi(authCode).then(() => {
+    initApi(authCode, state).then(() => {
       dispatch(setIsLoggedInAction(getIsLoggedIn()));
     });
 
