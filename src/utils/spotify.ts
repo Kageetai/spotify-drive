@@ -4,8 +4,6 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import { SpotifyAuth, SpotifyAuthVanilla } from '../types/spotify';
 import { generateRandomString } from './random';
 
-const stateKey = 'authState';
-const state = generateRandomString(16);
 const scopes = ['user-read-private', 'user-read-email'];
 const redirectUri = window.location.origin;
 
@@ -13,6 +11,7 @@ let accessToken = localStorage.getItem('accessToken');
 let refreshToken = localStorage.getItem('refreshToken');
 let expiresIn = parseInt(localStorage.getItem('expiresIn') || '0');
 let expiresAt = parseInt(localStorage.getItem('expiresAt') || '0');
+const state = localStorage.getItem('authState');
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
@@ -22,8 +21,9 @@ const spotifyApi = new SpotifyWebApi({
 export default spotifyApi;
 
 export const createAuthorizeURL = () => {
-  localStorage.setItem(stateKey, state);
-  return spotifyApi.createAuthorizeURL(scopes, state);
+  const newState = generateRandomString(16);
+  localStorage.setItem('authState', newState);
+  return spotifyApi.createAuthorizeURL(scopes, newState);
 };
 
 const mapAuth = (auth: SpotifyAuthVanilla): SpotifyAuth => ({
@@ -66,9 +66,12 @@ const setLocalToken = (auth: SpotifyAuth) => {
   refreshToken = auth.refreshToken;
 };
 
-export const initApi = async (authCode?: string) => {
-  // TODO check for state mismatch
+export const initApi = async (authCode?: string, newState?: string) => {
   if (authCode && authCode !== '') {
+    if (newState !== state) {
+      console.error('state mismatch');
+      return new Promise((resolve, reject) => reject());
+    }
     return fetchToken(authCode)
       .then(setLocalToken)
       .catch((err) => console.error(err));
