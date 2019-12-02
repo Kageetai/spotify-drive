@@ -42,9 +42,19 @@ const fetchToken = (authCode: string) =>
       redirectUri,
   )
     .then((res) => res.json())
-    .then((auth) => mapAuth(auth));
+    .then(mapAuth);
+
+const fetchNewToken = () =>
+  fetch(
+    process.env.REACT_APP_LAMBDA_BASE + 'refresh?refreshToken=' + refreshToken,
+  )
+    .then((res) => res.json())
+    .then(mapAuth);
 
 const setLocalToken = (auth: SpotifyAuth) => {
+  spotifyApi.setAccessToken(auth.accessToken);
+  spotifyApi.setRefreshToken(auth.refreshToken);
+
   const absoluteExpiresAt = Date.now() + parseInt(auth.expiresIn);
   localStorage.setItem('accessToken', auth.accessToken);
   localStorage.setItem('expiresIn', auth.expiresIn);
@@ -60,15 +70,14 @@ export const initApi = async (authCode?: string) => {
   // TODO check for state mismatch
   if (authCode && authCode !== '') {
     return fetchToken(authCode)
-      .then((auth) => {
-        spotifyApi.setAccessToken(auth.accessToken);
-        spotifyApi.setRefreshToken(auth.refreshToken);
-        setLocalToken(auth);
-      })
+      .then(setLocalToken)
       .catch((err) => console.error(err));
-  } else if (isTokenExpired()) {
-    console.log('token expired');
-  } else if (accessToken && refreshToken) {
+  } else if (isTokenExpired() && refreshToken) {
+    console.log('token expired, fetching new one');
+    return fetchNewToken()
+      .then(setLocalToken)
+      .catch((err) => console.error(err));
+  } else if (accessToken && refreshToken && expiresIn && expiresAt) {
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
     return new Promise((resolve) => resolve());
@@ -77,7 +86,4 @@ export const initApi = async (authCode?: string) => {
 
 const isTokenExpired = () => expiresAt && expiresAt < Date.now();
 
-export const getIsLoggedIn = () => {
-  const now = Date.now();
-  return !!accessToken && expiresIn + now > now;
-};
+export const getIsLoggedIn = () => !!accessToken && !isTokenExpired();
