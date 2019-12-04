@@ -1,31 +1,21 @@
-import React, { createContext, Dispatch, useReducer } from 'react';
+import { Action, action, createStore, createTypedHooks } from 'easy-peasy';
 
-import { actions, Action } from './actions';
-
-const initialState = {
-  isLoggedIn: false,
-};
-type State = typeof initialState;
-interface Context {
-  state: State;
-  dispatch: Dispatch<Action>;
+interface Store {
+  isLoggedIn: boolean;
+  setIsLoggedIn: Action<Store, boolean>;
 }
 
-const store = createContext<Context>({} as Context);
-const { Provider } = store;
-
-const StateProvider = ({ children }: { children: React.ReactChild }) => {
-  const [state, dispatch] = useReducer((state: State, action: Action) => {
-    switch (action.type) {
-      case actions.SET_IS_LOGGED_IN:
-        return { ...initialState, isLoggedIn: action.payload.value };
-      default:
-        throw new Error('wrong action type');
-      // return state;
-    }
-  }, initialState);
-
-  return <Provider value={{ state, dispatch }}>{children}</Provider>;
+const initialState: Store = {
+  isLoggedIn: false,
+  setIsLoggedIn: action((state, payload) => {
+    state.isLoggedIn = payload;
+  }),
 };
 
-export { store, StateProvider };
+export const store = createStore(initialState);
+
+const typedHooks = createTypedHooks<Store>();
+
+export const useStoreActions = typedHooks.useStoreActions;
+export const useStoreDispatch = typedHooks.useStoreDispatch;
+export const useStoreState = typedHooks.useStoreState;
