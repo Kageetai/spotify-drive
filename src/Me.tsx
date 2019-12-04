@@ -1,13 +1,14 @@
 import React from 'react';
 
-import spotifyApi from './utils/spotify';
+import { useStoreActions, useStoreState } from './store';
 
 const Me: React.FC = () => {
-  const [me, setMe] = React.useState<SpotifyApi.CurrentUsersProfileResponse>();
+  const me = useStoreState((state) => state.me);
+  const fetchMe = useStoreActions((actions) => actions.fetchMe);
 
   React.useEffect(() => {
-    spotifyApi.getMe().then((res) => setMe(res.body));
-  }, []);
+    fetchMe();
+  }, [fetchMe]);
 
   return me ? (
     <div style={{ textTransform: 'capitalize' }}>
