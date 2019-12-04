@@ -1,14 +1,20 @@
-export enum actions {
-  SET_IS_LOGGED_IN = 'SET_IS_LOGGED_IN',
+import { action, Action } from 'easy-peasy';
+
+import { SpotifyUser } from './types/spotify';
+import { Store } from './store';
+
+export interface Actions {
+  setIsLoggedIn: Action<Store, boolean>;
+  setMe: Action<Store, SpotifyUser>;
 }
 
-export function setIsLoggedIn(value: boolean) {
-  return {
-    type: actions.SET_IS_LOGGED_IN,
-    payload: {
-      value,
-    },
-  };
-}
+const actions: Actions = {
+  setIsLoggedIn: action((state, payload) => {
+    state.isLoggedIn = payload;
+  }),
+  setMe: action((state, payload) => {
+    state.me = payload;
+  }),
+};
 
-export type Action = ReturnType<typeof setIsLoggedIn>;
+export default actions;

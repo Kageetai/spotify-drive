@@ -1,34 +1,18 @@
-import {
-  Action,
-  action,
-  createStore,
-  createTypedHooks,
-  Thunk,
-  thunk,
-} from 'easy-peasy';
-import spotifyApi from './utils/spotify';
-import { SpotifyUser } from './types/spotify';
+import { createStore, createTypedHooks } from 'easy-peasy';
 
-interface Store {
+import { SpotifyUser } from './types/spotify';
+import actions, { Actions } from './actions';
+import thunks, { Thunks } from './thunks';
+
+export interface Store extends Actions, Thunks {
   isLoggedIn: boolean;
   me?: SpotifyUser;
-  setIsLoggedIn: Action<Store, boolean>;
-  setMe: Action<Store, SpotifyUser>;
-  fetchMe: Thunk<Store>;
 }
 
 const initialState: Store = {
   isLoggedIn: false,
-  setIsLoggedIn: action((state, payload) => {
-    state.isLoggedIn = payload;
-  }),
-  setMe: action((state, payload) => {
-    state.me = payload;
-  }),
-  fetchMe: thunk(async (actions) => {
-    const res = await spotifyApi.getMe();
-    actions.setMe(res.body);
-  }),
+  ...actions,
+  ...thunks,
 };
 
 export const store = createStore(initialState);
