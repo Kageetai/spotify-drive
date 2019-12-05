@@ -1,6 +1,6 @@
 import { createStore, createTypedHooks } from 'easy-peasy';
 
-import { SpotifyUser } from './types/spotify';
+import { Playlist, SpotifyUser } from './types/spotify';
 import actions, { Actions } from './actions';
 import thunks, { Thunks } from './thunks';
 import spotifyApi from './utils/spotify';
@@ -8,6 +8,7 @@ import spotifyApi from './utils/spotify';
 export interface Store extends Actions, Thunks {
   isLoggedIn: boolean;
   me?: SpotifyUser;
+  playlists?: Playlist[];
 }
 
 export interface Injections {

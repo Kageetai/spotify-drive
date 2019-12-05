@@ -2,6 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Me from './Me';
+import Playlists from './Paylists';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
 import { useStoreActions, useStoreState } from './store';
 
@@ -29,7 +30,10 @@ const App: React.FC = () => {
         <h1>Spotify Library Manager</h1>
 
         {isLoggedIn ? (
-          <Me />
+          <>
+            <Me />
+            <Playlists />
+          </>
         ) : (
           <a className="App-link" href={createAuthorizeURL()}>
             Login
