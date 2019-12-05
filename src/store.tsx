@@ -1,31 +1,30 @@
-import React, { createContext, Dispatch, useReducer } from 'react';
+import { createStore, createTypedHooks } from 'easy-peasy';
 
-import { actions, Action } from './actions';
+import { Playlist, SpotifyUser } from './types/spotify';
+import actions, { Actions } from './actions';
+import thunks, { Thunks } from './thunks';
+import spotifyApi from './utils/spotify';
 
-const initialState = {
-  isLoggedIn: false,
-};
-type State = typeof initialState;
-interface Context {
-  state: State;
-  dispatch: Dispatch<Action>;
+export interface Store extends Actions, Thunks {
+  isLoggedIn: boolean;
+  me?: SpotifyUser;
+  playlists?: Playlist[];
 }
 
-const store = createContext<Context>({} as Context);
-const { Provider } = store;
+export interface Injections {
+  spotifyApi: typeof spotifyApi;
+}
 
-const StateProvider = ({ children }: { children: React.ReactChild }) => {
-  const [state, dispatch] = useReducer((state: State, action: Action) => {
-    switch (action.type) {
-      case actions.SET_IS_LOGGED_IN:
-        return { ...initialState, isLoggedIn: action.payload.value };
-      default:
-        throw new Error('wrong action type');
-      // return state;
-    }
-  }, initialState);
-
-  return <Provider value={{ state, dispatch }}>{children}</Provider>;
+const initialState: Store = {
+  isLoggedIn: false,
+  ...actions,
+  ...thunks,
 };
 
-export { store, StateProvider };
+export const store = createStore(initialState, { injections: { spotifyApi } });
+
+const typedHooks = createTypedHooks<Store>();
+
+export const useStoreActions = typedHooks.useStoreActions;
+export const useStoreDispatch = typedHooks.useStoreDispatch;
+export const useStoreState = typedHooks.useStoreState;

@@ -2,12 +2,13 @@ import React from 'react';
 
 import './App.css';
 import Me from './Me';
+import Playlists from './Paylists';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
-import { store } from './store';
-import { setIsLoggedIn as setIsLoggedInAction } from './actions';
+import { useStoreActions, useStoreState } from './store';
 
 const App: React.FC = () => {
-  const { dispatch, state } = React.useContext(store);
+  const isLoggedIn = useStoreState((state) => state.isLoggedIn);
+  const setIsLoggedIn = useStoreActions((actions) => actions.setIsLoggedIn);
 
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -15,21 +16,24 @@ const App: React.FC = () => {
     const state = urlParams.get('state') || '';
 
     initApi(authCode, state).then(() => {
-      dispatch(setIsLoggedInAction(getIsLoggedIn()));
+      setIsLoggedIn(getIsLoggedIn());
     });
 
     if (authCode) {
       window.history.replaceState({}, document.title, '/');
     }
-  }, [dispatch]);
+  }, [setIsLoggedIn]);
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Spotify Library Manager</h1>
 
-        {state.isLoggedIn ? (
-          <Me />
+        {isLoggedIn ? (
+          <>
+            <Me />
+            <Playlists />
+          </>
         ) : (
           <a className="App-link" href={createAuthorizeURL()}>
             Login

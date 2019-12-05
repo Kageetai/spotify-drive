@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { StoreProvider,  } from 'easy-peasy';
 
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { StateProvider } from './store';
+import { store } from './store';
 
 ReactDOM.render(
-  <StateProvider>
+  <StoreProvider store={store}>
     <App />
-  </StateProvider>,
+  </StoreProvider>,
   document.getElementById('root'),
 );
 
