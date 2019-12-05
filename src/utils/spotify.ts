@@ -22,6 +22,9 @@ let expiresIn = parseInt(localStorage.getItem('expiresIn') || '0');
 let expiresAt = parseInt(localStorage.getItem('expiresAt') || '0');
 const state = localStorage.getItem('authState');
 
+const isDefined = (item: string) =>
+  item !== '' && item !== 'undefined' && item !== 'NaN';
+
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
   redirectUri: redirectUri,
@@ -62,21 +65,27 @@ const fetchNewToken = () =>
 
 const setLocalToken = (auth: SpotifyAuth) => {
   spotifyApi.setAccessToken(auth.accessToken);
-  spotifyApi.setRefreshToken(auth.refreshToken);
+  if (auth.refreshToken) {
+    spotifyApi.setRefreshToken(auth.refreshToken);
+  }
 
-  const absoluteExpiresAt = Date.now() + parseInt(auth.expiresIn);
+  const absoluteExpiresAt = Date.now() + parseInt(auth.expiresIn) * 1000;
   localStorage.setItem('accessToken', auth.accessToken);
   localStorage.setItem('expiresIn', auth.expiresIn);
   localStorage.setItem('expiresAt', absoluteExpiresAt.toString());
-  localStorage.setItem('refreshToken', auth.refreshToken);
+  if (auth.refreshToken) {
+    localStorage.setItem('refreshToken', auth.refreshToken);
+  }
   accessToken = auth.accessToken;
   expiresIn = parseInt(auth.expiresIn);
   expiresAt = absoluteExpiresAt;
-  refreshToken = auth.refreshToken;
+  if (auth.refreshToken) {
+    refreshToken = auth.refreshToken;
+  }
 };
 
 export const initApi = async (authCode?: string, newState?: string) => {
-  if (authCode && authCode !== '') {
+  if (authCode && isDefined(authCode)) {
     if (newState !== state) {
       console.error('state mismatch');
       return new Promise((resolve, reject) => reject());
@@ -84,19 +93,26 @@ export const initApi = async (authCode?: string, newState?: string) => {
     return fetchToken(authCode)
       .then(setLocalToken)
       .catch((err) => console.error(err));
-  } else if (isTokenExpired() && refreshToken) {
+  } else if ((refreshToken && isDefined(refreshToken)) && isTokenExpired()) {
     console.log('token expired, fetching new one');
     return fetchNewToken()
       .then(setLocalToken)
       .catch((err) => console.error(err));
-  } else if (accessToken && refreshToken && expiresIn && expiresAt) {
+  } else if (
+    accessToken &&
+    refreshToken &&
+    expiresIn &&
+    expiresAt &&
+    isDefined(accessToken) &&
+    isDefined(refreshToken)
+  ) {
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
     return new Promise((resolve) => resolve());
   }
 };
 
-const isTokenExpired = () => expiresAt && expiresAt < Date.now();
+const isTokenExpired = () => expiresAt && Date.now() > expiresAt;
 
 export const getIsLoggedIn = () =>
   !!accessToken && accessToken !== 'undefined' && !isTokenExpired();
