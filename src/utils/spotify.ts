@@ -4,7 +4,16 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import { SpotifyAuth, SpotifyAuthVanilla } from '../types/spotify';
 import { generateRandomString } from './random';
 
-const scopes = ['user-read-private', 'user-read-email'];
+const scopes = [
+  'user-read-private',
+  'user-read-email',
+  'playlist-read-collaborative',
+  'playlist-modify-public',
+  'playlist-read-private',
+  'playlist-modify-private',
+  'user-library-modify',
+  'user-library-read',
+];
 const redirectUri = window.location.origin;
 
 let accessToken = localStorage.getItem('accessToken');
