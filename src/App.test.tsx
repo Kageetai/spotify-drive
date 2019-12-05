@@ -1,15 +1,16 @@
+import { StoreProvider } from 'easy-peasy';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
-import { StateProvider } from './store';
+import { store } from './store';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-    <StateProvider>
+    <StoreProvider store={store}>
       <App />
-    </StateProvider>,
+    </StoreProvider>,
     div,
   );
   ReactDOM.unmountComponentAtNode(div);
