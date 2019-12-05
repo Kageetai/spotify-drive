@@ -10,9 +10,13 @@ const Playlists: React.FC = () => {
     fetchPlaylists();
   }, [fetchPlaylists]);
 
-  console.log(playlists);
-
-  return null;
+  return playlists ? (
+    <ul>
+      {playlists.map((playlist) => (
+        <li key={playlist.id}>{playlist.name}</li>
+      ))}
+    </ul>
+  ) : null;
 };
 
 export default Playlists;
