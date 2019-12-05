@@ -98,4 +98,5 @@ export const initApi = async (authCode?: string, newState?: string) => {
 
 const isTokenExpired = () => expiresAt && expiresAt < Date.now();
 
-export const getIsLoggedIn = () => !!accessToken && !isTokenExpired();
+export const getIsLoggedIn = () =>
+  !!accessToken && accessToken !== 'undefined' && !isTokenExpired();
