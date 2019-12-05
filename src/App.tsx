@@ -1,10 +1,12 @@
+import { Global } from '@emotion/core';
 import React from 'react';
 
-import './App.css';
 import Me from './Me';
 import Playlists from './Paylists';
+import globalStyles from './styled/global';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
 import { useStoreActions, useStoreState } from './store';
+import StyledApp from './styled/App';
 
 const App: React.FC = () => {
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
@@ -25,7 +27,9 @@ const App: React.FC = () => {
   }, [setIsLoggedIn]);
 
   return (
-    <div className="App">
+    <StyledApp>
+      <Global styles={globalStyles} />
+
       <header className="App-header">
         <h1>Spotify Library Manager</h1>
 
@@ -40,7 +44,7 @@ const App: React.FC = () => {
           </a>
         )}
       </header>
-    </div>
+    </StyledApp>
   );
 };
 
