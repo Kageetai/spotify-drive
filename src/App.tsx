@@ -1,7 +1,7 @@
 import { Global } from '@emotion/core';
 import React from 'react';
 
-import Playlists from './Paylists';
+import Playlists from './components/Paylists';
 import globalStyles from './styled/global';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
 import { useStoreActions, useStoreState } from './store';
