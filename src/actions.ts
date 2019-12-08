@@ -7,7 +7,7 @@ export interface Actions {
   setIsLoggedIn: Action<Store, boolean>;
   setMe: Action<Store, SpotifyUser>;
   setPlaylists: Action<Store, Playlist[]>;
-  setSelectedPlaylist: Action<Store, Playlist>;
+  setSelectedPlaylist: Action<Store, Playlist | null>;
 }
 
 const actions: Actions = {

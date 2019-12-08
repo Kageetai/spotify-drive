@@ -32,3 +32,9 @@ const StyledApp = styled('div')`
 `;
 
 export default StyledApp;
+
+export const Container = styled('div')`
+  padding: 1em;
+  max-width: 960px;
+  margin: 0 auto;
+`;

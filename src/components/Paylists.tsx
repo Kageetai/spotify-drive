@@ -17,14 +17,11 @@ const Playlists: React.FC = () => {
 
   return playlists ? (
     selectedPlaylist ? (
-      <Playlist />
+      <Playlist playlist={selectedPlaylist} />
     ) : (
       <StyledPlaylists>
         {playlists.map((playlist) => (
-          <li
-            key={playlist.id}
-            onClick={() => fetchPlaylist(playlist.id)}
-          >
+          <li key={playlist.id} onClick={() => fetchPlaylist(playlist.id)}>
             {playlist.name}
           </li>
         ))}
