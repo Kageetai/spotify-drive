@@ -1,10 +1,12 @@
+import { Global } from '@emotion/core';
 import React from 'react';
 
-import './App.css';
-import Me from './Me';
 import Playlists from './Paylists';
+import globalStyles from './styled/global';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
 import { useStoreActions, useStoreState } from './store';
+import StyledApp from './styled/App';
+import Header from './components/Header';
 
 const App: React.FC = () => {
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
@@ -25,22 +27,19 @@ const App: React.FC = () => {
   }, [setIsLoggedIn]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Spotify Library Manager</h1>
+    <StyledApp>
+      <Global styles={globalStyles} />
 
-        {isLoggedIn ? (
-          <>
-            <Me />
-            <Playlists />
-          </>
-        ) : (
-          <a className="App-link" href={createAuthorizeURL()}>
-            Login
-          </a>
-        )}
-      </header>
-    </div>
+      <Header />
+
+      {isLoggedIn ? (
+        <Playlists />
+      ) : (
+        <a className="App-link" href={createAuthorizeURL()}>
+          Login
+        </a>
+      )}
+    </StyledApp>
   );
 };
 
