@@ -5,6 +5,7 @@ import { Injections, Store } from './store';
 export interface Thunks {
   fetchMe: Thunk<Store, undefined, Injections>;
   fetchPlaylists: Thunk<Store, undefined, Injections>;
+  fetchPlaylist: Thunk<Store, string, Injections>;
 }
 
 const limit = 50;
@@ -32,6 +33,10 @@ const thunks: Thunks = {
     }
 
     actions.setPlaylists(playlists);
+  }),
+  fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
+    const res = await injections.spotifyApi.getPlaylist(playlistId);
+    actions.setSelectedPlaylist(res.body);
   }),
 };
 

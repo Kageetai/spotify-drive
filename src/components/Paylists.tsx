@@ -9,9 +9,7 @@ const Playlists: React.FC = () => {
   const playlists = useStoreState((state) => state.playlists);
   const selectedPlaylist = useStoreState((state) => state.selectedPlaylist);
   const fetchPlaylists = useStoreActions((actions) => actions.fetchPlaylists);
-  const setSelectedPlaylist = useStoreActions(
-    (actions) => actions.setSelectedPlaylist,
-  );
+  const fetchPlaylist = useStoreActions((actions) => actions.fetchPlaylist);
 
   React.useEffect(() => {
     fetchPlaylists();
@@ -25,7 +23,7 @@ const Playlists: React.FC = () => {
         {playlists.map((playlist) => (
           <li
             key={playlist.id}
-            onClick={() => setSelectedPlaylist(playlist.id)}
+            onClick={() => fetchPlaylist(playlist.id)}
           >
             {playlist.name}
           </li>

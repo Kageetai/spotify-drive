@@ -9,7 +9,7 @@ export interface Store extends Actions, Thunks {
   isLoggedIn: boolean;
   me?: SpotifyUser;
   playlists?: Playlist[];
-  selectedPlaylist?: string;
+  selectedPlaylist?: Playlist;
 }
 
 export interface Injections {
