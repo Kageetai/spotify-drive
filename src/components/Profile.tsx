@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useStoreActions, useStoreState } from '../store';
-import StyledProfile from '../styled/profile';
+import StyledProfile from '../styled/Profile';
 
 const Profile: React.FC = () => {
   const me = useStoreState((state) => state.me);

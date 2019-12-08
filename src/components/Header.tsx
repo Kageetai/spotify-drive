@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useStoreState } from '../store';
-import StyledHeader from '../styled/header';
+import StyledHeader from '../styled/Header';
 
 import Profile from './Profile';
 

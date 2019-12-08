@@ -6,7 +6,7 @@ import globalStyles from './styled/global';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
 import { useStoreActions, useStoreState } from './store';
 import StyledApp from './styled/App';
-import Header from './components/header';
+import Header from './components/Header';
 
 const App: React.FC = () => {
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
