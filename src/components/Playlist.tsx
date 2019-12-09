@@ -15,10 +15,10 @@ const Playlist: React.FC<Props> = ({ playlist }: Props) => {
 
   return (
     <StyledPlaylist>
+      <button onClick={() => setSelectedPlaylist(null)}>&larr; back</button>
+
       <h2>
         <a href={playlist.uri}>{playlist.name}</a>
-
-        <button onClick={() => setSelectedPlaylist(null)}>X</button>
       </h2>
 
       <img src={playlist.images[0].url} alt="playlist" />
