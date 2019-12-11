@@ -21,7 +21,7 @@
     "react-dom": "16.12.0",
     "react-scripts": "3.3.0",
     "spotify-web-api-node": "4.0.0",
-    "typescript": "3.7.2"
+    "typescript": "3.7.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.8.0",
