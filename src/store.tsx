@@ -6,6 +6,7 @@ import thunks, { Thunks } from './thunks';
 import spotifyApi from './utils/spotify';
 
 export interface Store extends Actions, Thunks {
+  error?: Error;
   isLoggedIn: boolean;
   me?: SpotifyUser;
   playlists?: Playlist[];

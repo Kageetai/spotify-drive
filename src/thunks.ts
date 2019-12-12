@@ -8,7 +8,7 @@ export interface Thunks {
   fetchPlaylist: Thunk<Store, string, Injections>;
 }
 
-const limit = 50;
+const playlistsLimit = 50;
 
 const thunks: Thunks = {
   fetchMe: thunk(async (actions, payload, { injections }) => {
@@ -16,23 +16,27 @@ const thunks: Thunks = {
     actions.setMe(res.body);
   }),
   fetchPlaylists: thunk(async (actions, payload, { injections }) => {
-    let { body } = await injections.spotifyApi.getUserPlaylists({
-      limit,
-      offset: 0,
-    });
-    let playlists = body.items;
+    try {
+      let { body } = await injections.spotifyApi.getUserPlaylists({
+        limit: playlistsLimit,
+        offset: 0,
+      });
+      let playlists = body.items;
 
-    while (body.next) {
-      body = (
-        await injections.spotifyApi.getUserPlaylists({
-          limit,
-          offset: body.offset + limit,
-        })
-      ).body;
-      playlists = [...playlists, ...body.items];
+      while (body.next) {
+        body = (
+          await injections.spotifyApi.getUserPlaylists({
+            limit: playlistsLimit,
+            offset: body.offset + playlistsLimit,
+          })
+        ).body;
+        playlists = [...playlists, ...body.items];
+      }
+
+      actions.setPlaylists(playlists);
+    } catch (e) {
+      actions.setError(e);
     }
-
-    actions.setPlaylists(playlists);
   }),
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
     const res = await injections.spotifyApi.getPlaylist(playlistId);

@@ -4,6 +4,7 @@ import { Playlist, SpotifyUser } from './types/spotify';
 import { Store } from './store';
 
 export interface Actions {
+  setError: Action<Store, Error>;
   setIsLoggedIn: Action<Store, boolean>;
   setMe: Action<Store, SpotifyUser>;
   setPlaylists: Action<Store, Playlist[]>;
@@ -11,6 +12,9 @@ export interface Actions {
 }
 
 const actions: Actions = {
+  setError: action((state, payload) => {
+    state.error = payload;
+  }),
   setIsLoggedIn: action((state, payload) => {
     state.isLoggedIn = payload;
   }),
