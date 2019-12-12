@@ -23,12 +23,13 @@ const Playlist: React.FC<Props> = ({ playlist }: Props) => {
       <img src={playlist.images[0].url} alt="playlist" />
 
       <List>
-        {playlist.tracks?.length &&
-          playlist.tracks.map((track) => (
-            <li key={track.track.id}>
+        {playlist.tracks?.map((track) => (
+          <li key={track.track.id}>
+            <a href={track.track.uri}>
               {track.track.artists[0].name} - {track.track.name}
-            </li>
-          ))}
+            </a>
+          </li>
+        ))}
       </List>
     </StyledPlaylist>
   );

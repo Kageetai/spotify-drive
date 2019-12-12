@@ -45,8 +45,8 @@ const thunks: Thunks = {
     } = await injections.spotifyApi.getPlaylist(playlistId);
     actions.setSelectedPlaylist(playlist);
 
-    let newTracks: SpotifyApi.PlaylistTrackObject[] = [];
-    let tracksBody = { offset: 0 } as SpotifyApi.PlaylistTrackResponse;
+    let fetchedTracks: SpotifyApi.PlaylistTrackObject[] = [];
+    let tracksBody = { offset: -tracksLimit } as SpotifyApi.PlaylistTrackResponse;
 
     do {
       tracksBody = (
@@ -56,10 +56,10 @@ const thunks: Thunks = {
         })
       ).body;
 
-      newTracks = [...newTracks, ...tracksBody.items];
+      fetchedTracks = [...fetchedTracks, ...tracksBody.items];
     } while (tracksBody.next);
 
-    actions.setPlayListTracks({ playlistId, tracks: newTracks });
+    actions.setPlayListTracks({ playlistId, tracks: fetchedTracks.filter((track) => track.track) });
   }),
 };
 
