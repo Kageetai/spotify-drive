@@ -40,10 +40,12 @@ const thunks: Thunks = {
     }
   }),
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
-    const { body } = await injections.spotifyApi.getPlaylist(playlistId);
-    actions.setSelectedPlaylist(body);
+    const {
+      body: { tracks, ...playlist },
+    } = await injections.spotifyApi.getPlaylist(playlistId);
+    actions.setSelectedPlaylist(playlist);
 
-    let tracks: SpotifyApi.PlaylistTrackObject[] = [];
+    let newTracks: SpotifyApi.PlaylistTrackObject[] = [];
     let tracksBody = { offset: 0 } as SpotifyApi.PlaylistTrackResponse;
 
     do {
@@ -54,10 +56,10 @@ const thunks: Thunks = {
         })
       ).body;
 
-      tracks = [...tracks, ...tracksBody.items];
+      newTracks = [...newTracks, ...tracksBody.items];
     } while (tracksBody.next);
 
-    actions.setPlayListTracks({ playlistId, tracks });
+    actions.setPlayListTracks({ playlistId, tracks: newTracks });
   }),
 };
 

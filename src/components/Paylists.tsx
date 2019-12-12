@@ -1,6 +1,6 @@
 import React from 'react';
 
-import StyledPlaylists from '../styled/Playlists';
+import List from '../styled/List';
 import { useStoreActions, useStoreState } from '../store';
 
 import Playlist from './Playlist';
@@ -19,13 +19,13 @@ const Playlists: React.FC = () => {
     selectedPlaylist ? (
       <Playlist playlist={selectedPlaylist} />
     ) : (
-      <StyledPlaylists>
+      <List>
         {playlists.map((playlist) => (
           <li key={playlist.id} onClick={() => fetchPlaylist(playlist.id)}>
             {playlist.name}
           </li>
         ))}
-      </StyledPlaylists>
+      </List>
     )
   ) : null;
 };

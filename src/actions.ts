@@ -1,14 +1,14 @@
 import { action, Action } from 'easy-peasy';
 
-import { Playlist, PlaylistTrack, SpotifyUser } from './types/spotify';
+import { PlaylistFull, PlaylistSimplified, PlaylistTrack, SpotifyUser } from './types/spotify';
 import { Store } from './store';
 
 export interface Actions {
   setError: Action<Store, Error>;
   setIsLoggedIn: Action<Store, boolean>;
   setMe: Action<Store, SpotifyUser>;
-  setPlaylists: Action<Store, Playlist[]>;
-  setSelectedPlaylist: Action<Store, Playlist | null>;
+  setPlaylists: Action<Store, PlaylistSimplified[]>;
+  setSelectedPlaylist: Action<Store, PlaylistFull | null>;
   setPlayListTracks: Action<Store, { playlistId: string; tracks: PlaylistTrack[] }>;
 }
 
@@ -30,11 +30,6 @@ const actions: Actions = {
   }),
   setPlayListTracks: action((state, payload) => {
     const { playlistId, tracks } = payload;
-
-    if (state.playlists?.length) {
-      const index = state.playlists.findIndex((p) => p.id === playlistId);
-      state.playlists[index].tracks = tracks;
-    }
 
     if (playlistId === state.selectedPlaylist?.id) {
       state.selectedPlaylist.tracks = tracks;

@@ -54,7 +54,7 @@ interface SpotifyUserPublic {
   uri: string;
 }
 
-export interface Playlist {
+interface PlaylistBase {
   collaborative: boolean;
   external_urls: ExternalUrl;
   href: string;
@@ -66,10 +66,19 @@ export interface Playlist {
   snapshot_id: string;
   type: 'playlist';
   uri: string;
+}
+
+export interface PlaylistSimplified extends PlaylistBase {
   tracks: {
-    href: string;
-    total: number;
-  } | PlaylistTrack[];
+    href: string,
+    total: number
+  }
+}
+
+export interface PlaylistFull extends PlaylistBase {
+  description: string,
+  followers: Followers,
+  tracks?: PlaylistTrack[];
 }
 
 export interface PlaylistTrack {

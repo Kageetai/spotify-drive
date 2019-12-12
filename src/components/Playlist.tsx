@@ -1,17 +1,16 @@
 import React from 'react';
 import { useStoreActions } from '../store';
 
-import { Playlist as PlaylistType } from '../types/spotify';
+import { PlaylistFull } from '../types/spotify';
 import StyledPlaylist from '../styled/Playlist';
+import List from '../styled/List';
 
 interface Props {
-  playlist: PlaylistType;
+  playlist: PlaylistFull;
 }
 
 const Playlist: React.FC<Props> = ({ playlist }: Props) => {
-  const setSelectedPlaylist = useStoreActions(
-    (actions) => actions.setSelectedPlaylist,
-  );
+  const setSelectedPlaylist = useStoreActions((actions) => actions.setSelectedPlaylist);
 
   return (
     <StyledPlaylist>
@@ -22,6 +21,15 @@ const Playlist: React.FC<Props> = ({ playlist }: Props) => {
       </h2>
 
       <img src={playlist.images[0].url} alt="playlist" />
+
+      <List>
+        {playlist.tracks?.length &&
+          playlist.tracks.map((track) => (
+            <li key={track.track.id}>
+              {track.track.artists[0].name} - {track.track.name}
+            </li>
+          ))}
+      </List>
     </StyledPlaylist>
   );
 };
