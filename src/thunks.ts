@@ -9,6 +9,7 @@ export interface Thunks {
 }
 
 const playlistsLimit = 50;
+const tracksLimit = 100;
 
 const thunks: Thunks = {
   fetchMe: thunk(async (actions, payload, { injections }) => {
@@ -39,8 +40,24 @@ const thunks: Thunks = {
     }
   }),
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
-    const res = await injections.spotifyApi.getPlaylist(playlistId);
-    actions.setSelectedPlaylist(res.body);
+    const { body } = await injections.spotifyApi.getPlaylist(playlistId);
+    actions.setSelectedPlaylist(body);
+
+    let tracks: SpotifyApi.PlaylistTrackObject[] = [];
+    let tracksBody = { offset: 0 } as SpotifyApi.PlaylistTrackResponse;
+
+    do {
+      tracksBody = (
+        await injections.spotifyApi.getPlaylistTracks(playlistId, {
+          limit: tracksLimit,
+          offset: tracksBody.offset + tracksLimit,
+        })
+      ).body;
+
+      tracks = [...tracks, ...tracksBody.items];
+    } while (tracksBody.next);
+
+    actions.setPlayListTracks({ playlistId, tracks });
   }),
 };
 
