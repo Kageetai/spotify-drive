@@ -29,6 +29,22 @@ const StyledApp = styled('div')`
   h6 {
     color: ${theme.colors.primary};
   }
+
+  button {
+    background-color: transparent;
+    border: 1px solid ${theme.colors.primary};
+    cursor: pointer;
+    
+    &:hover {
+    background-color: ${theme.colors.lightgray};
+    }
+  }
 `;
 
 export default StyledApp;
+
+export const Container = styled('div')`
+  padding: 1em;
+  max-width: 960px;
+  margin: 0 auto;
+`;

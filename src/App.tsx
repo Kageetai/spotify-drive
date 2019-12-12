@@ -1,11 +1,11 @@
 import { Global } from '@emotion/core';
 import React from 'react';
 
-import Playlists from './Paylists';
+import Playlists from './components/Paylists';
 import globalStyles from './styled/global';
 import { createAuthorizeURL, initApi, getIsLoggedIn } from './utils/spotify';
 import { useStoreActions, useStoreState } from './store';
-import StyledApp from './styled/App';
+import StyledApp, { Container } from './styled/App';
 import Header from './components/Header';
 
 const App: React.FC = () => {
@@ -32,13 +32,15 @@ const App: React.FC = () => {
 
       <Header />
 
-      {isLoggedIn ? (
-        <Playlists />
-      ) : (
-        <a className="App-link" href={createAuthorizeURL()}>
-          Login
-        </a>
-      )}
+      <Container>
+        {isLoggedIn ? (
+          <Playlists />
+        ) : (
+          <a className="App-link" href={createAuthorizeURL()}>
+            Login
+          </a>
+        )}
+      </Container>
     </StyledApp>
   );
 };
