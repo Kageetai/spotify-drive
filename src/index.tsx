@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { StoreProvider,  } from 'easy-peasy';
+import { StoreProvider } from 'easy-peasy';
+import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
 import App from './App';
@@ -9,7 +10,9 @@ import { store } from './store';
 
 ReactDOM.render(
   <StoreProvider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StoreProvider>,
   document.getElementById('root'),
 );
