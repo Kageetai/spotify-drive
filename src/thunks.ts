@@ -4,6 +4,7 @@ import { Injections, Store } from './store';
 
 export interface Thunks {
   fetchMe: Thunk<Store, undefined, Injections>;
+  fetchLibrary: Thunk<Store, undefined, Injections>;
   fetchPlaylists: Thunk<Store, undefined, Injections>;
   fetchPlaylist: Thunk<Store, string, Injections>;
 }
@@ -15,6 +16,23 @@ const thunks: Thunks = {
   fetchMe: thunk(async (actions, payload, { injections }) => {
     const res = await injections.spotifyApi.getMe();
     actions.setMe(res.body);
+  }),
+  fetchLibrary: thunk(async (actions, payload, { injections }) => {
+    let { body } = await injections.spotifyApi.getMySavedTracks();
+
+    let tracks = body.items;
+
+    while (body.next) {
+      body = (
+        await injections.spotifyApi.getMySavedTracks({
+          limit: tracksLimit,
+          offset: body.offset + tracksLimit,
+        })
+      ).body;
+      tracks = [...tracks, ...body.items];
+    }
+
+    actions.setLibrary(tracks);
   }),
   fetchPlaylists: thunk(async (actions, payload, { injections }) => {
     try {

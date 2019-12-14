@@ -83,8 +83,8 @@ export interface PlaylistFull extends PlaylistBase {
 
 export interface PlaylistTrack {
   added_at: string,
-  added_by: SpotifyUserPublic,
-  is_local: boolean,
+  added_by?: SpotifyUserPublic,
+  is_local?: boolean,
   track: TrackFull
 }
 

@@ -7,6 +7,7 @@ export interface Actions {
   setError: Action<Store, Error>;
   setIsLoggedIn: Action<Store, boolean>;
   setMe: Action<Store, SpotifyUser>;
+  setLibrary: Action<Store, PlaylistTrack[]>;
   setPlaylists: Action<Store, PlaylistSimplified[]>;
   setSelectedPlaylist: Action<Store, PlaylistFull | null>;
   setPlayListTracks: Action<Store, { playlistId: string; tracks: PlaylistTrack[] }>;
@@ -21,6 +22,9 @@ const actions: Actions = {
   }),
   setMe: action((state, me) => {
     state.me = me;
+  }),
+  setLibrary: action((state, tracks) => {
+    state.library = tracks;
   }),
   setPlaylists: action((state, playlists) => {
     state.playlists = playlists;
