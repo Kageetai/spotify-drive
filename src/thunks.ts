@@ -1,6 +1,7 @@
 import { thunk, Thunk } from 'easy-peasy';
 
 import { Injections, Store } from './store';
+import { PlaylistFull } from './types/spotify';
 
 export interface Thunks {
   fetchMe: Thunk<Store, undefined, Injections>;
@@ -58,12 +59,10 @@ const thunks: Thunks = {
     }
   }),
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
-    const {
-      body: { tracks, ...playlist },
-    } = await injections.spotifyApi.getPlaylist(playlistId);
-    actions.setSelectedPlaylist(playlist);
+    const { body } = await injections.spotifyApi.getPlaylist(playlistId);
+    const playlist: PlaylistFull = { ...body, tracks: body.tracks.items };
+    actions.setPlayList({ playlistId: body.description, playlist });
 
-    let fetchedTracks: SpotifyApi.PlaylistTrackObject[] = [];
     let tracksBody = { offset: -tracksLimit } as SpotifyApi.PlaylistTrackResponse;
 
     do {
@@ -74,10 +73,10 @@ const thunks: Thunks = {
         })
       ).body;
 
-      fetchedTracks = [...fetchedTracks, ...tracksBody.items];
+      playlist.tracks = [...playlist.tracks, ...tracksBody.items];
     } while (tracksBody.next);
 
-    actions.setPlayListTracks({ playlistId, tracks: fetchedTracks.filter((track) => track.track) });
+    actions.setPlayList({ playlistId, playlist });
   }),
 };
 

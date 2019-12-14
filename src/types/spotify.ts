@@ -78,7 +78,7 @@ export interface PlaylistSimplified extends PlaylistBase {
 export interface PlaylistFull extends PlaylistBase {
   description: string,
   followers: Followers,
-  tracks?: PlaylistTrack[];
+  tracks: PlaylistTrack[];
 }
 
 export interface PlaylistTrack {

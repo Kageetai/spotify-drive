@@ -8,9 +8,8 @@ export interface Actions {
   setIsLoggedIn: Action<Store, boolean>;
   setMe: Action<Store, SpotifyUser>;
   setLibrary: Action<Store, PlaylistTrack[]>;
-  setPlaylists: Action<Store, PlaylistSimplified[]>;
-  setSelectedPlaylist: Action<Store, PlaylistFull | null>;
-  setPlayListTracks: Action<Store, { playlistId: string; tracks: PlaylistTrack[] }>;
+  setPlaylists: Action<Store, Array<PlaylistSimplified | PlaylistFull>>;
+  setPlayList: Action<Store, { playlistId: string; playlist: PlaylistFull }>;
 }
 
 const actions: Actions = {
@@ -29,14 +28,12 @@ const actions: Actions = {
   setPlaylists: action((state, playlists) => {
     state.playlists = playlists;
   }),
-  setSelectedPlaylist: action((state, playlist) => {
-    state.selectedPlaylist = playlist;
-  }),
-  setPlayListTracks: action((state, payload) => {
-    const { playlistId, tracks } = payload;
-
-    if (playlistId === state.selectedPlaylist?.id) {
-      state.selectedPlaylist.tracks = tracks;
+  setPlayList: action((state, { playlistId, playlist }) => {
+    const index = state.playlists?.findIndex((p) => p.id === playlistId);
+    if (index >= 0) {
+      state.playlists[index] = playlist;
+    } else {
+      state.playlists = [...state.playlists, playlist];
     }
   }),
 };
