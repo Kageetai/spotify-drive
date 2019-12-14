@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import theme from './theme';
+
 export default styled('div')`
   display: flex;
   flex-direction: row;
@@ -8,6 +10,6 @@ export default styled('div')`
   > img {
     width: 100px;
     height: 100px;
-    margin-right: 1em;
+    margin-right: 0 ${theme.grid.base};
   }
 `;

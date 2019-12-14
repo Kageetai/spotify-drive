@@ -11,7 +11,7 @@ export default styled('ul')`
     border-bottom: 1px solid ${theme.colors.lightgray};
     padding: 0.5em;
 
-    &:hover {
+    &[onCLick]:hover {
       cursor: pointer;
       background-color: ${theme.colors.lightgray};
     }

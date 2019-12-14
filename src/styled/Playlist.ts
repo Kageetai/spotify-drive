@@ -1,14 +1,16 @@
 import styled from '@emotion/styled';
 
+import theme from './theme';
+
 export default styled('div')`
   > h2 {
-    > *:last-child:not(:only-child) {
-      float: right;
+    overflow: auto;
+    
+    > img {
+      width: 150px;
+      height: auto;
+      float: left;
+      margin-right: ${theme.grid.base};
     }
-  }
-
-  > img {
-    width: 300px;
-    height: auto;
   }
 `;

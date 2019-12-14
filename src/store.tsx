@@ -28,7 +28,7 @@ const initialState: Store = {
 };
 
 export const getPlaylistById = (state: State<Store>, id: string) =>
-  state.playlists?.find((p) => p.id === id);
+  state.playlists.find((p) => p.id === id);
 
 export const store = createStore(initialState, { injections: { spotifyApi } });
 

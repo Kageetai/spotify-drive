@@ -3,4 +3,7 @@ export default {
     primary: '#158837',
     lightgray: '#eaeaea',
   },
+  grid: {
+    base: '1rem',
+  },
 };

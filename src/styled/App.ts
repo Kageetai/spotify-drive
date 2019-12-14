@@ -44,7 +44,7 @@ const StyledApp = styled('div')`
 export default StyledApp;
 
 export const Container = styled('div')`
-  padding: 1em;
+  padding: 0 ${theme.grid.base};
   max-width: 960px;
   margin: 0 auto;
 `;
