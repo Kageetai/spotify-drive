@@ -10,6 +10,6 @@ export default styled('div')`
   > img {
     width: 100px;
     height: 100px;
-    margin-right: 0 ${theme.grid.base};
+    margin-right: ${theme.grid.base};
   }
 `;
