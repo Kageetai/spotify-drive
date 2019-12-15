@@ -15,7 +15,7 @@ const scopes = [
   'user-library-modify',
   'user-library-read',
 ];
-const redirectUri = window.location.origin;
+const redirectUri = window.location.origin + '/';
 
 let accessToken = localStorage.getItem('accessToken');
 let refreshToken = localStorage.getItem('refreshToken');
