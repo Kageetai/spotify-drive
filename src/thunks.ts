@@ -64,7 +64,7 @@ const thunks: Thunks = {
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
     const { body } = await injections.spotifyApi.getPlaylist(playlistId);
     const playlist: PlaylistFull = { ...body, tracks: filterValidTracks(body.tracks.items) };
-    actions.setPlayList({ playlistId: body.description, playlist });
+    actions.setPlayList({ playlistId: body.id, playlist });
 
     let tracksBody = { offset: -tracksLimit } as SpotifyApi.PlaylistTrackResponse;
 
