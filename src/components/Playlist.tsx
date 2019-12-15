@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import { getPlaylistById, useStoreActions, useStoreState } from '../store';
 import { Container } from '../styled/App';
 import StyledPlaylist from '../styled/Playlist';
@@ -25,8 +26,6 @@ const Playlist: React.FC = () => {
   }
 
   const image = playlist.images.length && playlist.images[0];
-
-  console.log(playlist);
 
   return playlist ? (
     <Container>

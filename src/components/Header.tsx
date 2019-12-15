@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { useStoreState } from '../store';
 import StyledHeader from '../styled/Header';
@@ -10,7 +11,9 @@ const Header = () => {
 
   return (
     <StyledHeader>
-      <h1>Spotify Library Manager</h1>
+      <Link to="/">
+        <h1>Spotify Library Manager</h1>
+      </Link>
 
       {isLoggedIn && <Profile />}
     </StyledHeader>

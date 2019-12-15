@@ -36,11 +36,11 @@ const App: React.FC = () => {
       <Header />
 
       <Switch>
-        <Route path="/:playlistId">
-          <Playlist />
-        </Route>
         <Route path="/library">
           <Library />
+        </Route>
+        <Route path="/:playlistId">
+          <Playlist />
         </Route>
         <Route path="/">
           <Container>

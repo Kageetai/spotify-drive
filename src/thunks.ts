@@ -10,6 +10,7 @@ export interface Thunks {
   fetchPlaylist: Thunk<Store, string, Injections>;
 }
 
+const libraryLimit = 50;
 const playlistsLimit = 50;
 const tracksLimit = 100;
 
@@ -28,8 +29,8 @@ const thunks: Thunks = {
     while (body.next) {
       body = (
         await injections.spotifyApi.getMySavedTracks({
-          limit: tracksLimit,
-          offset: body.offset + tracksLimit,
+          limit: libraryLimit,
+          offset: body.offset + libraryLimit,
         })
       ).body;
       tracks = [...tracks, ...body.items];
