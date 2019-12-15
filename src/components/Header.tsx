@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <StyledHeader>
       <Link to="/">
-        <h1>Spotify Library Manager</h1>
+        <h1>Spotify Drive</h1>
       </Link>
 
       {isLoggedIn && <Profile />}
