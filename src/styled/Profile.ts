@@ -8,8 +8,8 @@ export default styled('div')`
   text-transform: capitalize;
 
   > img {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     margin-right: ${theme.grid.base};
   }
 `;

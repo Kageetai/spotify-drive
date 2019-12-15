@@ -2,6 +2,7 @@ import 'isomorphic-fetch';
 import SpotifyWebApi from 'spotify-web-api-node';
 
 import { SpotifyAuth, SpotifyAuthVanilla } from '../types/spotify';
+
 import { generateRandomString } from './random';
 
 const scopes = [
@@ -22,8 +23,7 @@ let expiresIn = parseInt(localStorage.getItem('expiresIn') || '0');
 let expiresAt = parseInt(localStorage.getItem('expiresAt') || '0');
 const state = localStorage.getItem('authState');
 
-const isDefined = (item: string) =>
-  item !== '' && item !== 'undefined' && item !== 'NaN';
+const isDefined = (item: string) => item !== '' && item !== 'undefined' && item !== 'NaN';
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
@@ -57,9 +57,7 @@ const fetchToken = (authCode: string) =>
     .then(mapAuth);
 
 const fetchNewToken = () =>
-  fetch(
-    process.env.REACT_APP_LAMBDA_BASE + 'refresh?refreshToken=' + refreshToken,
-  )
+  fetch(process.env.REACT_APP_LAMBDA_BASE + 'refresh?refreshToken=' + refreshToken)
     .then((res) => res.json())
     .then(mapAuth);
 
@@ -84,6 +82,10 @@ const setLocalToken = (auth: SpotifyAuth) => {
   }
 };
 
+export const clearLocalToken = () => {
+  localStorage.clear();
+};
+
 export const initApi = async (authCode?: string, newState?: string) => {
   if (authCode && isDefined(authCode)) {
     if (newState !== state) {
@@ -93,7 +95,7 @@ export const initApi = async (authCode?: string, newState?: string) => {
     return fetchToken(authCode)
       .then(setLocalToken)
       .catch((err) => console.error(err));
-  } else if ((refreshToken && isDefined(refreshToken)) && isTokenExpired()) {
+  } else if (refreshToken && isDefined(refreshToken) && isTokenExpired()) {
     console.log('token expired, fetching new one');
     return fetchNewToken()
       .then(setLocalToken)
