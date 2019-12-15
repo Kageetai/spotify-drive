@@ -1,6 +1,7 @@
+import { URLSearchParams } from 'url';
+
 import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
 import 'isomorphic-fetch';
-import { URLSearchParams } from 'url';
 
 import { authorization } from './utils/auth';
 
@@ -10,11 +11,7 @@ interface MaResponse {
   headers: {};
 }
 
-const handler: Handler = (
-  event: APIGatewayEvent,
-  context: Context,
-  callback: Callback,
-) => {
+const handler: Handler = (event: APIGatewayEvent, context: Context, callback: Callback) => {
   try {
     const refreshToken = event.queryStringParameters?.refreshToken || '';
 

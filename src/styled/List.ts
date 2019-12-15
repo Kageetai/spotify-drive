@@ -9,9 +9,9 @@ export default styled('ul')`
 
   > li {
     border-bottom: 1px solid ${theme.colors.lightgray};
-    padding: 0.5em;
+    padding: 0.5em 0;
 
-    &:hover {
+    &[onCLick]:hover {
       cursor: pointer;
       background-color: ${theme.colors.lightgray};
     }

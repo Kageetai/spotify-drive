@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useStoreActions, useStoreState } from '../store';
 import StyledProfile from '../styled/Profile';
+import { clearLocalToken } from '../utils/spotify';
 
 const Profile: React.FC = () => {
   const me = useStoreState((state) => state.me);
@@ -10,6 +11,11 @@ const Profile: React.FC = () => {
   React.useEffect(() => {
     fetchMe();
   }, [fetchMe]);
+
+  const onLogout = () => {
+    clearLocalToken();
+    window.location.reload();
+  };
 
   return me ? (
     <StyledProfile>
@@ -22,6 +28,10 @@ const Profile: React.FC = () => {
 
         <p>
           {me.product}, {me.followers && me.followers.total} Followers
+        </p>
+
+        <p>
+          <button onClick={onLogout}>Logout</button>
         </p>
       </div>
     </StyledProfile>

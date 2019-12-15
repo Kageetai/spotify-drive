@@ -1,20 +1,42 @@
 import { thunk, Thunk } from 'easy-peasy';
 
 import { Injections, Store } from './store';
+import { PlaylistFull, PlaylistTrack } from './types/spotify';
 
 export interface Thunks {
   fetchMe: Thunk<Store, undefined, Injections>;
+  fetchLibrary: Thunk<Store, undefined, Injections>;
   fetchPlaylists: Thunk<Store, undefined, Injections>;
   fetchPlaylist: Thunk<Store, string, Injections>;
 }
 
+const libraryLimit = 50;
 const playlistsLimit = 50;
 const tracksLimit = 100;
+
+const filterValidTracks = (tracks: PlaylistTrack[]) => tracks.filter((track) => track.track);
 
 const thunks: Thunks = {
   fetchMe: thunk(async (actions, payload, { injections }) => {
     const res = await injections.spotifyApi.getMe();
     actions.setMe(res.body);
+  }),
+  fetchLibrary: thunk(async (actions, payload, { injections }) => {
+    let { body } = await injections.spotifyApi.getMySavedTracks();
+
+    let tracks = body.items;
+
+    while (body.next) {
+      body = (
+        await injections.spotifyApi.getMySavedTracks({
+          limit: libraryLimit,
+          offset: body.offset + libraryLimit,
+        })
+      ).body;
+      tracks = [...tracks, ...body.items];
+    }
+
+    actions.setLibrary(tracks);
   }),
   fetchPlaylists: thunk(async (actions, payload, { injections }) => {
     try {
@@ -40,12 +62,10 @@ const thunks: Thunks = {
     }
   }),
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
-    const {
-      body: { tracks, ...playlist },
-    } = await injections.spotifyApi.getPlaylist(playlistId);
-    actions.setSelectedPlaylist(playlist);
+    const { body } = await injections.spotifyApi.getPlaylist(playlistId);
+    const playlist: PlaylistFull = { ...body, tracks: filterValidTracks(body.tracks.items) };
+    actions.setPlayList({ playlistId: body.id, playlist });
 
-    let fetchedTracks: SpotifyApi.PlaylistTrackObject[] = [];
     let tracksBody = { offset: -tracksLimit } as SpotifyApi.PlaylistTrackResponse;
 
     do {
@@ -56,10 +76,10 @@ const thunks: Thunks = {
         })
       ).body;
 
-      fetchedTracks = [...fetchedTracks, ...tracksBody.items];
+      playlist.tracks = [...playlist.tracks, ...filterValidTracks(tracksBody.items)];
     } while (tracksBody.next);
 
-    actions.setPlayListTracks({ playlistId, tracks: fetchedTracks.filter((track) => track.track) });
+    actions.setPlayList({ playlistId, playlist });
   }),
 };
 

@@ -7,7 +7,7 @@ export default styled('header')`
   flex-direction: row;
   justify-content: space-between;
   background-color: ${theme.colors.lightgray};
-  padding: 0 1em;
+  padding: 0 ${theme.grid.base};
 
   > h1 {
     display: block;

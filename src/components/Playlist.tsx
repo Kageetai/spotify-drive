@@ -1,38 +1,50 @@
 import React from 'react';
-import { useStoreActions } from '../store';
+import { useParams } from 'react-router-dom';
 
-import { PlaylistFull } from '../types/spotify';
+import { getPlaylistById, useStoreActions, useStoreState } from '../store';
+import { Container } from '../styled/App';
 import StyledPlaylist from '../styled/Playlist';
 import List from '../styled/List';
+import { PlaylistFull } from '../types/spotify';
 
-interface Props {
-  playlist: PlaylistFull;
-}
+const Playlist: React.FC = () => {
+  const { playlistId } = useParams();
+  const isLoggedIn = useStoreState((state) => state.isLoggedIn);
+  const playlist = useStoreState((state) =>
+    getPlaylistById(state, playlistId || ''),
+  ) as PlaylistFull;
+  const fetchPlaylist = useStoreActions((actions) => actions.fetchPlaylist);
 
-const Playlist: React.FC<Props> = ({ playlist }: Props) => {
-  const setSelectedPlaylist = useStoreActions((actions) => actions.setSelectedPlaylist);
+  React.useEffect(() => {
+    if (isLoggedIn && playlistId) {
+      fetchPlaylist(playlistId);
+    }
+  }, [isLoggedIn, playlistId, fetchPlaylist]);
 
-  return (
-    <StyledPlaylist>
-      <button onClick={() => setSelectedPlaylist(null)}>&larr; back</button>
+  if (!isLoggedIn || !playlistId || !playlist) {
+    return null;
+  }
 
-      <h2>
-        <a href={playlist.uri}>{playlist.name}</a>
-      </h2>
+  const image = playlist.images.length && playlist.images[0];
 
-      <img src={playlist.images[0].url} alt="playlist" />
+  return playlist ? (
+    <Container>
+      <StyledPlaylist>
+        <h2>
+          {image && (
+            <img src={image.url} alt={playlist.name} width={image.width} height={image.height} />
+          )}
+          {playlist.name}
+        </h2>
 
-      <List>
-        {playlist.tracks?.map((track) => (
-          <li key={track.track.id}>
-            <a href={track.track.uri}>
-              {track.track.artists[0].name} - {track.track.name}
-            </a>
-          </li>
-        ))}
-      </List>
-    </StyledPlaylist>
-  );
+        <List>
+          {playlist?.tracks.map((track) => (
+            <li key={track.track.id}>{track.track.name}</li>
+          ))}
+        </List>
+      </StyledPlaylist>
+    </Container>
+  ) : null;
 };
 
 export default Playlist;
