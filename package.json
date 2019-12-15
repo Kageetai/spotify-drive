@@ -43,6 +43,7 @@
     "start:netlify": "tsc -p tsconfig.api.json --watch & netlify dev",
     "build": "react-scripts build && tsc -p tsconfig.api.json",
     "test": "react-scripts test",
+    "lint": "eslint src api --ext .ts,.tsx",
     "eject": "react-scripts eject"
   },
   "browserslist": {

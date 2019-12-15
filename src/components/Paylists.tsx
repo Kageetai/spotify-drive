@@ -1,8 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import List from '../styled/List';
 import { useStoreActions, useStoreState } from '../store';
-import { Link } from 'react-router-dom';
 
 const Playlists: React.FC = () => {
   const playlists = useStoreState((state) => state.playlists);
