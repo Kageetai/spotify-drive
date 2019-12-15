@@ -5,12 +5,12 @@ import { getPlaylistById, useStoreActions, useStoreState } from '../store';
 import { Container } from '../styled/App';
 import StyledPlaylist from '../styled/Playlist';
 import List from '../styled/List';
-import { PlaylistFull } from '../types/spotify';
+import { PlaylistFull, PlaylistSimplified } from '../types/spotify';
 
 const Playlist: React.FC = () => {
   const { playlistId } = useParams();
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
-  const playlist = useStoreState((state) =>
+  const playlist: PlaylistSimplified | PlaylistFull = useStoreState((state) =>
     getPlaylistById(state, playlistId || ''),
   ) as PlaylistFull;
   const fetchPlaylist = useStoreActions((actions) => actions.fetchPlaylist);
@@ -37,11 +37,13 @@ const Playlist: React.FC = () => {
           {playlist.name}
         </h2>
 
-        <List>
-          {playlist?.tracks.map((track) => (
-            <li key={track.track.id}>{track.track.name}</li>
-          ))}
-        </List>
+        {playlist.tracks.length && (
+          <List>
+            {playlist?.tracks.map((track) => (
+              <li key={track.track.id}>{track.track.name}</li>
+            ))}
+          </List>
+        )}
       </StyledPlaylist>
     </Container>
   ) : null;
