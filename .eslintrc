@@ -28,6 +28,7 @@
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "import/order": ["error", {"newlines-between": "always"}]
+    "import/order": ["error", { "newlines-between": "always" }],
+    "prettier/prettier": "error"
   }
 }
