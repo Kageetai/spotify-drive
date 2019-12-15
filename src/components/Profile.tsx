@@ -12,6 +12,11 @@ const Profile: React.FC = () => {
     fetchMe();
   }, [fetchMe]);
 
+  const onLogout = () => {
+    clearLocalToken();
+    window.location.reload();
+  };
+
   return me ? (
     <StyledProfile>
       {me.images && <img src={me.images[0].url} alt="" />}
@@ -26,7 +31,7 @@ const Profile: React.FC = () => {
         </p>
 
         <p>
-          <button onClick={clearLocalToken}>Logout</button>
+          <button onClick={onLogout}>Logout</button>
         </p>
       </div>
     </StyledProfile>
