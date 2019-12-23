@@ -3,7 +3,14 @@ import styled from '@emotion/styled';
 import theme from './theme';
 
 const StyledApp = styled('div')`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   font-family: 'Open Sans', sans-serif;
+
+  > * {
+    flex-grow: 1;
+  }
 
   a {
     text-decoration: none;
@@ -38,6 +45,7 @@ export default StyledApp;
 
 export const Container = styled('div')`
   padding: 0 ${theme.grid.base};
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
 `;

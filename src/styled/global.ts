@@ -6,6 +6,10 @@ const globalStyles = css`
     min-height: 100vh;
     color: black;
   }
+
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 export default globalStyles;

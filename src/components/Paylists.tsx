@@ -3,14 +3,20 @@ import { Link } from 'react-router-dom';
 
 import List from '../styled/List';
 import { useStoreActions, useStoreState } from '../store';
+import Loading from '../styled/Loading';
 
 const Playlists: React.FC = () => {
   const playlists = useStoreState((state) => state.playlists);
+  const isLoading = useStoreState((state) => state.isLoading);
   const fetchPlaylists = useStoreActions((actions) => actions.fetchPlaylists);
 
   React.useEffect(() => {
     fetchPlaylists();
   }, [fetchPlaylists]);
+
+  if (isLoading) {
+    return <Loading>Loading Playlists</Loading>;
+  }
 
   return playlists ? (
     <List>

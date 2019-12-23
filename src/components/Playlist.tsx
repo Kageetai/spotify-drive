@@ -6,10 +6,12 @@ import { Container } from '../styled/App';
 import StyledPlaylist from '../styled/Playlist';
 import List from '../styled/List';
 import { PlaylistFull, PlaylistSimplified } from '../types/spotify';
+import Loading from '../styled/Loading';
 
 const Playlist: React.FC = () => {
   const { playlistId } = useParams();
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
+  const isLoading = useStoreState((state) => state.isLoading);
   const playlist: PlaylistSimplified | PlaylistFull = useStoreState((state) =>
     getPlaylistById(state, playlistId || ''),
   ) as PlaylistFull;
@@ -21,11 +23,15 @@ const Playlist: React.FC = () => {
     }
   }, [isLoggedIn, playlistId, fetchPlaylist]);
 
-  if (!isLoggedIn || !playlistId || !playlist) {
+  if (!isLoggedIn || !playlistId) {
     return null;
   }
 
-  const image = playlist.images.length && playlist.images[0];
+  if (isLoading) {
+    return <Loading>Loading Playlist Tracks</Loading>;
+  }
+
+  const image = playlist && playlist.images.length && playlist.images[0];
 
   return playlist ? (
     <Container>

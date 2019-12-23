@@ -8,6 +8,7 @@ import spotifyApi from './utils/spotify';
 export interface Store extends Actions, Thunks {
   error: Error | null;
   isLoggedIn: boolean;
+  isLoading: boolean;
   me: SpotifyUser | null;
   library: PlaylistTrack[];
   playlists: Array<PlaylistSimplified | PlaylistFull>;
@@ -20,6 +21,7 @@ export interface Injections {
 const initialState: Store = {
   error: null,
   isLoggedIn: false,
+  isLoading: false,
   me: null,
   library: [],
   playlists: [],

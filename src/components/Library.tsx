@@ -3,9 +3,11 @@ import React from 'react';
 import { Container } from '../styled/App';
 import { useStoreActions, useStoreState } from '../store';
 import List from '../styled/List';
+import Loading from '../styled/Loading';
 
 const Library = () => {
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
+  const isLoading = useStoreState((state) => state.isLoading);
   const library = useStoreState((state) => state.library);
   const fetchLibrary = useStoreActions((actions) => actions.fetchLibrary);
 
@@ -14,6 +16,10 @@ const Library = () => {
       fetchLibrary();
     }
   }, [isLoggedIn, fetchLibrary]);
+
+  if (isLoading) {
+    return <Loading>Loading Library Tracks</Loading>;
+  }
 
   return (
     <Container>

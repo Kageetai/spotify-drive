@@ -18,28 +18,40 @@ const filterValidTracks = (tracks: PlaylistTrack[]) => tracks.filter((track) => 
 
 const thunks: Thunks = {
   fetchMe: thunk(async (actions, payload, { injections }) => {
-    const res = await injections.spotifyApi.getMe();
-    actions.setMe(res.body);
+    try {
+      const res = await injections.spotifyApi.getMe();
+      actions.setMe(res.body);
+    } catch (e) {
+      actions.setError(e);
+    }
   }),
   fetchLibrary: thunk(async (actions, payload, { injections }) => {
-    let { body } = await injections.spotifyApi.getMySavedTracks();
+    try {
+      actions.setIsLoading(true);
 
-    let tracks = body.items;
+      let { body } = await injections.spotifyApi.getMySavedTracks();
+      let tracks = body.items;
 
-    while (body.next) {
-      body = (
-        await injections.spotifyApi.getMySavedTracks({
-          limit: libraryLimit,
-          offset: body.offset + libraryLimit,
-        })
-      ).body;
-      tracks = [...tracks, ...body.items];
+      while (body.next) {
+        body = (
+          await injections.spotifyApi.getMySavedTracks({
+            limit: libraryLimit,
+            offset: body.offset + libraryLimit,
+          })
+        ).body;
+        tracks = [...tracks, ...body.items];
+      }
+
+      actions.setLibrary(tracks);
+      actions.setIsLoading(false);
+    } catch (e) {
+      actions.setError(e);
     }
-
-    actions.setLibrary(tracks);
   }),
   fetchPlaylists: thunk(async (actions, payload, { injections }) => {
     try {
+      actions.setIsLoading(true);
+
       let { body } = await injections.spotifyApi.getUserPlaylists({
         limit: playlistsLimit,
         offset: 0,
@@ -57,29 +69,37 @@ const thunks: Thunks = {
       }
 
       actions.setPlaylists(playlists);
+      actions.setIsLoading(false);
     } catch (e) {
       actions.setError(e);
     }
   }),
   fetchPlaylist: thunk(async (actions, playlistId, { injections }) => {
-    const { body } = await injections.spotifyApi.getPlaylist(playlistId);
-    const playlist: PlaylistFull = { ...body, tracks: filterValidTracks(body.tracks.items) };
-    actions.setPlayList({ playlistId: body.id, playlist });
+    try {
+      actions.setIsLoading(true);
 
-    let tracksBody = { offset: -tracksLimit } as SpotifyApi.PlaylistTrackResponse;
+      const { body } = await injections.spotifyApi.getPlaylist(playlistId);
+      const playlist: PlaylistFull = { ...body, tracks: [] };
+      actions.setPlayList({ playlistId: body.id, playlist });
 
-    do {
-      tracksBody = (
-        await injections.spotifyApi.getPlaylistTracks(playlistId, {
-          limit: tracksLimit,
-          offset: tracksBody.offset + tracksLimit,
-        })
-      ).body;
+      let tracksBody = { offset: -tracksLimit } as SpotifyApi.PlaylistTrackResponse;
 
-      playlist.tracks = [...playlist.tracks, ...filterValidTracks(tracksBody.items)];
-    } while (tracksBody.next);
+      do {
+        tracksBody = (
+          await injections.spotifyApi.getPlaylistTracks(playlistId, {
+            limit: tracksLimit,
+            offset: tracksBody.offset + tracksLimit,
+          })
+        ).body;
 
-    actions.setPlayList({ playlistId, playlist });
+        playlist.tracks = [...playlist.tracks, ...filterValidTracks(tracksBody.items)];
+      } while (tracksBody.next);
+
+      actions.setPlayList({ playlistId, playlist });
+      actions.setIsLoading(false);
+    } catch (e) {
+      actions.setError(e);
+    }
   }),
 };
 
