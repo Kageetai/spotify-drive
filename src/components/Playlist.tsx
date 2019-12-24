@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { getPlaylistById, useStoreActions, useStoreState } from '../store';
 import { Container } from '../styled/App';
@@ -7,6 +7,7 @@ import StyledPlaylist from '../styled/Playlist';
 import List from '../styled/List';
 import { PlaylistFull, PlaylistSimplified } from '../types/spotify';
 import Loading from '../styled/Loading';
+import AButton from '../styled/AButton';
 
 const Playlist: React.FC = () => {
   const { playlistId } = useParams();
@@ -35,6 +36,10 @@ const Playlist: React.FC = () => {
 
   return playlist ? (
     <Container>
+      <Link to="/" component={AButton}>
+        &laquo; Back
+      </Link>
+
       <StyledPlaylist>
         <h2>
           {image && (

@@ -14,7 +14,7 @@ const Playlists: React.FC = () => {
     fetchPlaylists();
   }, [fetchPlaylists]);
 
-  if (isLoading) {
+  if (!playlists && isLoading) {
     return <Loading>Loading Playlists</Loading>;
   }
 

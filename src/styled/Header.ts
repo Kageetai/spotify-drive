@@ -9,6 +9,7 @@ export default styled('header')`
   flex-grow: 0;
   background-color: ${theme.colors.lightgray};
   padding: 0 ${theme.grid.base};
+  margin-bottom: ${theme.grid.base};
 
   > h1 {
     display: block;
