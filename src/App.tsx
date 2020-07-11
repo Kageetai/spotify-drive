@@ -10,6 +10,7 @@ import StyledApp, { Container } from './styled/App';
 import Header from './components/Header';
 import Library from './components/Library';
 import Playlist from './components/Playlist';
+import { initApi as initGapi } from './utils/gapi';
 
 const App: React.FC = () => {
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
@@ -23,6 +24,7 @@ const App: React.FC = () => {
     initApi(authCode, state).then(() => {
       setIsLoggedIn(getIsLoggedIn());
     });
+    initGapi();
 
     if (authCode) {
       window.history.replaceState({}, document.title, '/');
