@@ -32,7 +32,7 @@ const spotifyApi = new SpotifyWebApi({
 
 export default spotifyApi;
 
-export const createAuthorizeURL = () => {
+export const createAuthorizeURL = (): string => {
   const newState = generateRandomString(16);
   localStorage.setItem('authState', newState);
   return spotifyApi.createAuthorizeURL(scopes, newState);
@@ -47,17 +47,15 @@ const mapAuth = (auth: SpotifyAuthVanilla): SpotifyAuth => ({
 
 const fetchToken = (authCode: string) =>
   fetch(
-    process.env.REACT_APP_LAMBDA_BASE +
-      'token?authCode=' +
-      authCode +
-      '&redirectUri=' +
-      redirectUri,
+    `${
+      process.env.REACT_APP_LAMBDA_BASE as string
+    }token?authCode=${authCode}&redirectUri=${redirectUri}`,
   )
     .then((res) => res.json())
     .then(mapAuth);
 
-const fetchNewToken = () =>
-  fetch(process.env.REACT_APP_LAMBDA_BASE + 'refresh?refreshToken=' + refreshToken)
+const fetchNewToken = (token: string) =>
+  fetch(`${process.env.REACT_APP_LAMBDA_BASE as string}refresh?refreshToken=${token}`)
     .then((res) => res.json())
     .then(mapAuth);
 
@@ -82,11 +80,11 @@ const setLocalToken = (auth: SpotifyAuth) => {
   }
 };
 
-export const clearLocalToken = () => {
+export const clearLocalToken = (): void => {
   localStorage.clear();
 };
 
-export const initApi = async (authCode?: string, newState?: string) => {
+export const initApi = async (authCode?: string, newState?: string): Promise<unknown> => {
   if (authCode && isDefined(authCode)) {
     if (newState !== state) {
       console.error('state mismatch');
@@ -97,7 +95,7 @@ export const initApi = async (authCode?: string, newState?: string) => {
       .catch((err) => console.error(err));
   } else if (refreshToken && isDefined(refreshToken) && isTokenExpired()) {
     console.log('token expired, fetching new one');
-    return fetchNewToken()
+    return fetchNewToken(refreshToken)
       .then(setLocalToken)
       .catch((err) => console.error(err));
   } else if (
@@ -116,5 +114,5 @@ export const initApi = async (authCode?: string, newState?: string) => {
 
 const isTokenExpired = () => expiresAt && Date.now() > expiresAt;
 
-export const getIsLoggedIn = () =>
+export const getIsLoggedIn = (): boolean =>
   !!accessToken && accessToken !== 'undefined' && !isTokenExpired();

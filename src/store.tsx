@@ -1,6 +1,6 @@
 import { createStore, createTypedHooks, State } from 'easy-peasy';
 
-import { PlaylistFull, PlaylistSimplified, PlaylistTrack, SpotifyUser } from './types/spotify';
+import { Playlist, PlaylistTrack, SpotifyUser } from './types/spotify';
 import actions, { Actions } from './actions';
 import thunks, { Thunks } from './thunks';
 import spotifyApi from './utils/spotify';
@@ -11,7 +11,7 @@ export interface Store extends Actions, Thunks {
   isLoading: boolean;
   me: SpotifyUser | null;
   library: PlaylistTrack[];
-  playlists: Array<PlaylistSimplified | PlaylistFull>;
+  playlists: Array<Playlist>;
 }
 
 export interface Injections {
@@ -29,7 +29,7 @@ const initialState: Store = {
   ...thunks,
 };
 
-export const getPlaylistById = (state: State<Store>, id: string) =>
+export const getPlaylistById = (state: State<Store>, id: string): Playlist | undefined =>
   state.playlists.find((p) => p.id === id);
 
 export const store = createStore(initialState, { injections: { spotifyApi } });

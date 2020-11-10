@@ -1,6 +1,6 @@
 import { action, Action } from 'easy-peasy';
 
-import { PlaylistFull, PlaylistSimplified, PlaylistTrack, SpotifyUser } from './types/spotify';
+import { Playlist, PlaylistFull, PlaylistTrack, SpotifyUser } from './types/spotify';
 import { Store } from './store';
 
 export interface Actions {
@@ -9,7 +9,7 @@ export interface Actions {
   setIsLoading: Action<Store, boolean>;
   setMe: Action<Store, SpotifyUser>;
   setLibrary: Action<Store, PlaylistTrack[]>;
-  setPlaylists: Action<Store, Array<PlaylistSimplified | PlaylistFull>>;
+  setPlaylists: Action<Store, Array<Playlist>>;
   setPlayList: Action<Store, { playlistId: string; playlist: PlaylistFull }>;
 }
 

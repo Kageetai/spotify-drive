@@ -28,7 +28,14 @@
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "import/order": ["error", { "newlines-between": "always" }],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always"
+      }
+    ],
     "prettier/prettier": "error"
   }
 }

@@ -24,7 +24,7 @@ export interface Image {
 }
 
 interface Followers {
-  href: string;
+  href: null;
   total: number;
 }
 
@@ -62,7 +62,7 @@ interface PlaylistBase {
   images: Image[];
   name: string;
   owner: SpotifyUserPublic;
-  public: boolean;
+  public: boolean | null;
   snapshot_id: string;
   type: 'playlist';
   uri: string;
@@ -76,10 +76,12 @@ export interface PlaylistSimplified extends PlaylistBase {
 }
 
 export interface PlaylistFull extends PlaylistBase {
-  description: string;
+  description: string | null;
   followers: Followers;
   tracks: PlaylistTrack[];
 }
+
+export type Playlist = PlaylistSimplified | PlaylistFull;
 
 export interface PlaylistTrack {
   added_at: string;
@@ -105,7 +107,7 @@ interface TrackSimplified {
   is_playable?: boolean;
   linked_from?: TrackLink;
   name: string;
-  preview_url: string;
+  preview_url: string | null;
   track_number: number;
   type: 'track';
   uri: string;

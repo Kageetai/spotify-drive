@@ -5,15 +5,15 @@ import { getPlaylistById, useStoreActions, useStoreState } from '../store';
 import { Container } from '../styled/App';
 import StyledPlaylist from '../styled/Playlist';
 import List from '../styled/List';
-import { PlaylistFull, PlaylistSimplified } from '../types/spotify';
+import { Playlist as PlaylistType, PlaylistFull } from '../types/spotify';
 import Loading from '../styled/Loading';
 import AButton from '../styled/AButton';
 
 const Playlist: React.FC = () => {
-  const { playlistId } = useParams();
+  const { playlistId }: { playlistId: string } = useParams();
   const isLoggedIn = useStoreState((state) => state.isLoggedIn);
   const isLoading = useStoreState((state) => state.isLoading);
-  const playlist: PlaylistSimplified | PlaylistFull = useStoreState((state) =>
+  const playlist: PlaylistType = useStoreState((state) =>
     getPlaylistById(state, playlistId || ''),
   ) as PlaylistFull;
   const fetchPlaylist = useStoreActions((actions) => actions.fetchPlaylist);

@@ -1,7 +1,7 @@
 import { thunk, Thunk } from 'easy-peasy';
 
 import { Injections, Store } from './store';
-import { PlaylistFull, PlaylistTrack } from './types/spotify';
+import { PlaylistFull, PlaylistSimplified, PlaylistTrack } from './types/spotify';
 
 export interface Thunks {
   fetchMe: Thunk<Store, undefined, Injections>;
@@ -68,7 +68,7 @@ const thunks: Thunks = {
         playlists = [...playlists, ...body.items];
       }
 
-      actions.setPlaylists(playlists);
+      actions.setPlaylists(playlists as PlaylistSimplified[]);
       actions.setIsLoading(false);
     } catch (e) {
       actions.setError(e);
