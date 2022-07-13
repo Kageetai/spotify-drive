@@ -17,3 +17,14 @@ export default styled('ul')`
     }
   }
 `;
+
+export const Thumb = styled.div<{ src: string }>`
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  background-color: lightgray;
+  background-image: url(${({ src }) => src});
+  background-size: cover;
+  vertical-align: center;
+  margin-right: 1rem;
+`;

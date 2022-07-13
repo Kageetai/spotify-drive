@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import List from '../styled/List';
+import List, { Thumb } from '../styled/List';
 import { useStoreActions, useStoreState } from '../store';
 import Loading from '../styled/Loading';
 
@@ -18,7 +18,7 @@ const Playlists: React.FC = () => {
     return <Loading>Loading Playlists</Loading>;
   }
 
-  return playlists ? (
+  return (
     <List>
       <li>
         <Link to="/library">My Library</Link>
@@ -26,11 +26,15 @@ const Playlists: React.FC = () => {
 
       {playlists.map((playlist) => (
         <li key={playlist.id}>
-          <Link to={'/' + playlist.id}>{playlist.name}</Link>
+          <Link to={'/' + playlist.id}>
+            <Thumb src={playlist.images[0]?.url} />
+
+            {playlist.name}
+          </Link>
         </li>
       ))}
     </List>
-  ) : null;
+  );
 };
 
 export default Playlists;
